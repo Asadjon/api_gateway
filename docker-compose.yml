@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+
+  api_gateway:
+    image: api-gateway
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - network_mode
+    env_file:
+      - ./.env
+
+networks:
+  network_mode:
+    name: app-network
+    external: true

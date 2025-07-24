@@ -2,28 +2,35 @@ spring:
   application:
     name: api-gateway
   config:
-    import: optional:file:.env[.properties]
+    import: optional:file:test.env[.properties]
   cloud:
     gateway:
-      routes:
-        - id: auth-service
-          uri: ${AUTH_URI}
-          predicates:
-            - Path=/api/v1/auth/**
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: ${AUTH_URI}
+              predicates:
+                - Path=/api/v1/auth/**
 
-        - id: balance-service
-          uri: ${BALANCE_URI}
-          predicates:
-            - Path=/api/v1/balance/**
-          filters:
-            - name: AuthenticationFilter
+            - id: auth-service-view
+              uri: ${AUTH_URI}
+              predicates:
+                - Path=/auth/view/**
 
-        - id: transaction-service
-          uri: ${TRANSACTION_URI}
-          predicates:
-            - Path=/api/v1/transaction/**
-          filters:
-            - name: AuthenticationFilter
+            - id: balance-service
+              uri: ${BALANCE_URI}
+              predicates:
+                - Path=/api/v1/balance/**
+              filters:
+                - name: AuthenticationFilter
+
+            - id: transaction-service
+              uri: ${TRANSACTION_URI}
+              predicates:
+                - Path=/api/v1/transaction/**
+              filters:
+                - name: AuthenticationFilter
 
 management:
   endpoint:
